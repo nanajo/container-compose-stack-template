@@ -1,0 +1,52 @@
+services:
+# アプリケーション本体
+
+# モニタリング用コンテナ
+  podman-exporter:
+    image: quay.io/navidys/prometheus-podman-exporter:${PODMAN_EXPORTER_VER}
+    profiles: ["monitoring"]
+    container_name: podman-exporter
+    userns_mode: keep-id
+    user: 65534
+    command:
+      - --collector.enable-all
+      - --web.listen-address=:9882
+    environment:
+      CONTAINER_HOST: unix:///run/podman/podman.sock
+      HOME: /tmp
+      XDG_CONFIG_HOME: /tmp/.config
+    volumes:
+      - /run/user/${USER_UID}/podman/podman.sock:/run/podman/podman.sock:ro
+    logging:
+      driver: journald
+      options:
+        tag: "compose_app_name=${APP_NAME}"
+
+  alloy:
+    image: docker.io/grafana/alloy:${ALLOY_VER}
+    profiles: ["monitoring"]
+    container_name: alloy
+    command:
+      - run
+      - --server.http.listen-addr=0.0.0.0:12345
+      - --storage.path=/var/lib/alloy
+      - /etc/alloy/config.alloy
+    environment:
+      APP_NAME: ${APP_NAME}
+      ALLOY_JOB_NAME: ${ALLOY_JOB_NAME}
+      PROMETHEUS_REMOTE_WRITE_URL: ${PROMETHEUS_REMOTE_WRITE_URL}
+    volumes:
+      - ${APP_DIR_ROOT}/conf.d/config.alloy:/etc/alloy/config.alloy:ro
+      - ${APP_DATA_DIR}/alloy:/var/lib/alloy:Z
+    depends_on:
+      - podman-exporter
+    logging:
+      driver: journald
+      options:
+        tag: "compose_app_name=${APP_NAME}"
+
+# ネットワーク設定
+networks:
+  default:
+    name: ${PODMAN_NETWORK_0}
+    external: true

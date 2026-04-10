@@ -1,0 +1,5 @@
+compose.d usr/share/template-application/
+conf.d usr/share/template-application/
+scripts usr/share/template-application/
+template-application.service usr/lib/systemd/system/
+custom.env /etc/template-application/

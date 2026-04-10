@@ -1,0 +1,21 @@
+[Unit]
+Description=This is development template service
+Documentation=man:systemd.service(5)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=/usr/share/template-application/conf.d/env
+Environment=PODMAN_COMPOSE_PROVIDER=/usr/bin/podman-compose
+Type=oneshot
+RemainAfterExit=yes
+User=user_name
+Group=group_name
+WorkingDirectory=/usr/share/template-application
+ExecStart=/usr/share/template-application/scripts/start.sh
+ExecStop=/usr/share/template-application/scripts/stop.sh
+TimeoutStartSec=180
+TimeoutStopSec=180
+
+[Install]
+WantedBy=multi-user.target

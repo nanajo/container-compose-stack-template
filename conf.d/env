@@ -1,0 +1,33 @@
+#----------#
+# 基本情報 #
+#----------#
+# アプリケーション名
+APP_NAME="template-application"
+# モニタリング用alloyのジョブ名
+ALLOY_JOB_NAME="${APP_NAME}-alloy"
+
+# ディレクトリ定義
+APP_DIR_ROOT="/usr/share/${APP_NAME}"
+DATA_DIR_ROOT="/var/local/${APP_NAME}"
+ETC_DIR="/etc/${APP_NAME}"
+USER_HOME_DIR="${DATA_DIR_ROOT}/home"
+
+# ユーザー/グループ情報
+USER_NAME=""
+USER_UID=""
+GROUP_NAME=""
+GROUP_GID=""
+SUBUID="${USER_NAME}:100000:65536"
+SUBGID="${GROUP_NAME}:100000:65536"
+
+# 専用podmanネットワーク
+PODMAN_NETWORK_0="${APP_NAME}"
+
+# モニタリング用の alloy, prometheus-podman-exporter のバージョン
+ALLOY_VER="latest"
+PODMAN_EXPORTER_VER="v1.10.1"
+
+
+#------------------------#
+# アプリケーション別設定 #
+#------------------------#
