@@ -38,6 +38,7 @@ services:
       PROMETHEUS_REMOTE_WRITE_URL: ${PROMETHEUS_REMOTE_WRITE_URL}
     volumes:
       - ${APP_DIR_ROOT}/conf.d/config.alloy:/etc/alloy/config.alloy:ro
+      - /etc/hostname:/etc/host_hostname:ro
       - ${APP_DATA_DIR}/alloy:/var/lib/alloy:Z
     depends_on:
       - podman-exporter
